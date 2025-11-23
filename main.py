@@ -1,26 +1,40 @@
+#!/usr/bin/env python3
 import enum
 import logging
-import os
 import platform
 import sys
 from abc import abstractmethod
 from typing import Any, Dict, List, Optional
 
 import gi
-from attrs import define
 
 gi.require_version("GLib", "2.0")
 gi.require_version("GObject", "2.0")
 gi.require_version("Gst", "1.0")
 
-from gi.repository import GLib, GObject, Gst
+from gi.repository import GLib, Gst  # noqa: E402
 
-logging.basicConfig(level=logging.DEBUG, format="[%(name)s] [%(levelname)8s] - %(message)s")
+logging.basicConfig(
+    level=logging.DEBUG, format="[%(name)s] [%(levelname)8s] - %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 
+class SlotState(enum.Enum):
+    PREROLL = enum.auto()
+    ACTIVATING = enum.auto()
+    ACTIVE = enum.auto()
+    DEACTIVATING = enum.auto()
+    DEACTIVATED = enum.auto()
+
+
 class BaseOutput:
-    def __init__(self, py_kms_resource_manager: Optional[Any], file_descriptor: Optional[Any], connector_name):
+    def __init__(
+        self,
+        py_kms_resource_manager: Optional[Any],
+        file_descriptor: Optional[Any],
+        connector_name,
+    ):
         self._connector_name = connector_name
         self._res = py_kms_resource_manager
         if self._res:
@@ -34,7 +48,6 @@ class BaseOutput:
         else:
             self._fd = None
 
-        self._plane = None
         self._video_slots: List[VideoSlot] = []
 
     @property
@@ -50,7 +63,7 @@ class BaseOutput:
         found = False
         for p in self._video_slots:
             if p == slot:
-                p.state = SlotState.ACTIVATING
+                p._state = SlotState.ACTIVATING
                 found = True
             else:
                 slots_to_deactivate.append(p)
@@ -59,14 +72,14 @@ class BaseOutput:
             slots_to_deactivate.clear()
             for p in self._video_slots:
                 if p == slot:
-                    p.state = SlotState.ACTIVATING
+                    p._state = SlotState.ACTIVATING
                     found = True
                 else:
                     slots_to_deactivate.append(p)
 
         if found:
             for p in slots_to_deactivate:
-                p.state = SlotState.DEACTIVATING
+                p._state = SlotState.DEACTIVATING
 
     def play_video(self, file_name: str):
         for video_slot in self._video_slots:
@@ -86,8 +99,7 @@ class TestOutput(BaseOutput):
         logger.debug("Initialized test output %s", connector_name)
 
     def addVideoSlot(self):
-        video_slot = VideoSlot(self, useHwDecoder=True)
-        self._video_slots.append(video_slot)
+        self._video_slots.append(VideoSlot(self))
 
     def __repr__(self):
         return f"HDMIOutput {self._connector_name} ({self._conn.id})"
@@ -97,21 +109,19 @@ class HDMIOutput(BaseOutput):
     def __init__(self, py_kms_resource_manager, file_descriptor, connector_name):
         super().__init__(py_kms_resource_manager, file_descriptor, connector_name)
 
-        logger.debug("Initialized output %s with connector ID %s", connector_name, self._conn.id)
+        logger.debug(
+            "Initialized output %s with connector ID %s", connector_name, self._conn.id
+        )
 
     def addVideoSlot(self):
-        plane = self._res.reserve_overlay_plane(self._crtc)
-        self._plane = plane
-        video_slot = VideoSlot(self, useHwDecoder=True)
-        self._video_slots.append(video_slot)
+        self._video_slots.append(VideoSlot(self))
 
     def __repr__(self):
         return f"HDMIOutput {self._connector_name} ({self._conn.id})"
 
 
 class VideoMachine:
-    def __init__(self, use_test_environment: Optional[bool] = False):
-
+    def __init__(self, use_test_environment: bool):
         self._outputs: Dict[int, BaseOutput] = {}
 
         self._outputs[1] = TestOutput("Test Output 1")
@@ -147,13 +157,17 @@ class VideoMachine:
         self.update()
         self._mainloop.run()
 
-    def play_video(self, output_number: int, file_name: str):
+    def playVideo(self, output_number: int, file_name: str):
         try:
             output = self.outputs[output_number]
             output.play_video(file_name)
 
         except KeyError:
-            logger.error("No output with number %s present. Active outputs are %s", output_number, self.outputs)
+            logger.error(
+                "No output with number %s present. Active outputs are %s",
+                output_number,
+                self.outputs,
+            )
 
     def update(self):
         dt = 0.016
@@ -165,22 +179,18 @@ class VideoMachine:
 
 class BasePipeline:
     def __init__(self, slot: "VideoSlot"):
-        self._slot = slot
-
-        self._plane = slot._output._plane
         self._pipeline = Gst.Pipeline.new()
         self._sink = None
 
-        if not (slot._output._fd and slot._output._conn and slot._output._plane):
-            # this is not a system with KMS, use test sink
-            self._sink = Gst.ElementFactory.make("autovideosink")
-        else:
+        self._gst_state_old = None
+        self._gst_state_new = None
+        self._gst_state_pending = None
+
+        if platform.machine() == "aarch64":
             self._sink = Gst.ElementFactory.make("kmssink")
             self._sink.set_property("skip-vsync", "true")
-
-            self._sink.set_property("fd", slot._output._fd)
-            self._sink.set_property("connector-id", slot._output._conn.id)
-            self._sink.set_property("plane-id", slot._output._plane.id)
+        else:
+            self._sink = Gst.ElementFactory.make("autovideosink")
 
         # Create bus and connect several handlers
         self._bus = self._pipeline.get_bus()
@@ -200,16 +210,29 @@ class BasePipeline:
 
     def _onStateChanged(self, bus, msg):
         oldState, newState, pendingState = msg.parse_state_changed()
-        logger.debug(
-            "Pipeline %s state changed from %s to %s (pending %s)",
-            self,
-            oldState.value_nick,
-            newState.value_nick,
-            pendingState.value_nick,
+        if (
+            self._gst_state_old != oldState
+            or self._gst_state_new != newState
+            or self._gst_state_pending != pendingState
+        ):
+            logger.debug(
+                "Pipeline %s state changed from %s to %s (pending %s)",
+                self,
+                oldState.value_nick,
+                newState.value_nick,
+                pendingState.value_nick,
+            )
+        self._gst_state_old, self._gst_state_new, self._gst_state_pending = (
+            oldState,
+            newState,
+            pendingState,
         )
         # if newState == Gst.State.NULL:
-        #    logger.debug("State is NULL")
+        #    print("State is NULL")
         #    #self.pipeline.set_state(Gst.State.READY)
+
+    def _addToPipeline(self):
+        pass
 
     def _setPlaying(self):
         self._pipeline.set_state(Gst.State.PLAYING)
@@ -221,9 +244,6 @@ class BasePipeline:
     def stop(self):
         self._pipeline.set_state(Gst.State.NULL)
 
-    def setSourceFile(self, srcFileName):
-        self._source.set_property("location", srcFileName)
-
 
 class VideoPipelineDecodebin(BasePipeline):
     def __init__(self, slot: "VideoSlot"):
@@ -231,13 +251,23 @@ class VideoPipelineDecodebin(BasePipeline):
         self._source = Gst.ElementFactory.make("filesrc")
         self._decode = Gst.ElementFactory.make("decodebin")
         self._sink = None
-        self._kmssink_fd = None
-        if not (slot._output._fd and slot._output._conn and slot._output._plane):
-            self._sink = Gst.ElementFactory.make("autovideosink")
-        else:
+
+        if platform.machine() == "aarch64":
             self._sink = Gst.ElementFactory.make("kmssink")
             self._sink.set_property("skip-vsync", "true")
+        else:
+            self._sink = Gst.ElementFactory.make("autovideosink")
 
+        self._addToPipeline()
+
+        self._sink.set_property("fd", slot._output._fd)
+        self._sink.set_property("connector-id", slot._output._conn.id)
+        self._sink.set_property("plane-id", slot._plane.id)
+
+    def _onPadAdded(self, dbin, pad):
+        self._decode.link(self._sink)
+
+    def _addToPipeline(self):
         self._pipeline.add(self._source)
         self._pipeline.add(self._decode)
         self._pipeline.add(self._sink)
@@ -247,72 +277,29 @@ class VideoPipelineDecodebin(BasePipeline):
 
         self._decode.connect("pad-added", self._onPadAdded)
 
-    def _onPadAdded(self, dbin, pad):
-        self._decode.link(self._sink)
-
-
-class VideoPipelineH264(BasePipeline):
-    def __init__(self, slot: "VideoSlot"):
-        super().__init__(slot)
-        self._source = Gst.ElementFactory.make("filesrc")
-        self._demux = Gst.ElementFactory.make("qtdemux")
-        self._parse = Gst.ElementFactory.make("h264parse")
-        self._decode = Gst.ElementFactory.make("avdec_h264")
-        self._sink = None
-        self._kmssink_fd = None
-
-        if not (slot._output._fd and slot._output._conn and slot._output._plane):
-            # this is not a system with KMS, use test sink
-            self._sink = Gst.ElementFactory.make("autovideosink")
-        else:
-            self._sink = Gst.ElementFactory.make("kmssink")
-            self._sink.set_property("skip-vsync", "true")
-
-        self._pipeline.add(self._source)
-        self._pipeline.add(self._demux)
-        self._pipeline.add(self._parse)
-        self._pipeline.add(self._decode)
-        self._pipeline.add(self._sink)
-
-        if not self._source.link(self._demux):
-            logger.error("Link Error: source -> demux")
-
-        if not self._decode.link(self._sink):
-            logger.error("Link Error: source -> sink")
-
-        self._demux.connect("pad-added", self._onDemuxPadAdded)
-
-    def _onDemuxPadAdded(self, dbin, pad):
-        if pad.name == "video_0":
-            self._demux.link(self._decode)
-
-
-class SlotState(enum.Enum):
-    PREROLL = enum.auto()
-    ACTIVATING = enum.auto()
-    ACTIVE = enum.auto()
-    DEACTIVATING = enum.auto()
-    DEACTIVATED = enum.auto()
+    def setSourceFile(self, srcFileName):
+        self._source.set_property("location", srcFileName)
 
 
 class VideoSlot:
-    def __init__(self, output: BaseOutput, useHwDecoder: bool):
+    def __init__(self, output: BaseOutput):
         self._output = output
         self._pipeline: BasePipeline = None
         self._state = SlotState.DEACTIVATED
         self._alpha = 0.0
+        self._plane = output._res.reserve_overlay_plane(output._crtc)
 
-        self._useHwDecoder = useHwDecoder
-        self.fading = True
+        self.fading = False
+
+    @property
+    def state(self) -> SlotState:
+        return self._state
 
     def _resetPipeline(self):
-        if self._pipeline != None:
+        if self._pipeline is not None:
             self._pipeline.stop()
             del self._pipeline
-        if self._useHwDecoder:
-            self._pipeline = VideoPipelineDecodebin(self)
-        else:
-            self._pipeline = VideoPipelineH264(self)
+        self._pipeline = VideoPipelineDecodebin(self)
 
     def play(self, fileName):
         self.setAlpha(0.0)
@@ -325,20 +312,19 @@ class VideoSlot:
         self._pipeline.stop()
 
     def setAlpha(self, alpha):
-        if self._output._plane is None:
-            logger.warning("Fading not suppored, no KMS plane present.")
+        if self._plane is None:
             return
 
         self._alpha = min(1.0, max(0.0, alpha))
-        gstStruct = Gst.Structure("s")
+        Gst.Structure("s")
         value = int(self._alpha * 64000.0)
-        self._output._plane.set_props({"alpha": value})
+        self._plane.set_props({"alpha": value})
 
     def setZPos(self, zPos):
-        if self.output._plane is None:
+        if self._plane is None:
             return
 
-        self._output._plane.set_props({"zpos": zPos})
+        self._plane.set_props({"zpos": zPos})
 
     def update(self, dt):
         if self._state == SlotState.DEACTIVATED:
@@ -353,7 +339,7 @@ class VideoSlot:
                     self._state = SlotState.DEACTIVATED
             else:
                 self.setAlpha(0.0)
-                if self._pipeline != None:
+                if self._pipeline is not None:
                     self._pipeline.stop()
                     del self._pipeline
                     self._pipeline = None
@@ -378,7 +364,9 @@ def switchVideos():
     global index
 
     fileName0 = fileNames0[index]
-    vmOne.play_video(output_number=1, file_name=fileName0)
+    vmOne.playVideo(output_number=1, file_name=fileName0)
+    # fileName1 = fileNames1[index]
+    # vmOne.playVideo1(fileName1)
 
     GLib.timeout_add_seconds(3, switchVideos)
     index = index + 1
@@ -392,8 +380,10 @@ if __name__ == "__main__":
         with open("/sys/firmware/devicetree/base/model") as model:
             RPi_model = model.read()
             logger.debug("firmware model string: %s ", RPi_model)
-            if RPi_model.startswith("Raspberry Pi 5"):
-                logger.info("This seems to be a raspberry pi 5, using KMS and activate both HDMI outputs")
+            if RPi_model.tartswith("Raspberry Pi 5"):
+                logger.info(
+                    "This seems to be a raspberry pi 5, using KMS and activate both HDMI outputs"
+                )
                 is_raspi_5 = True
 
     except FileNotFoundError:
