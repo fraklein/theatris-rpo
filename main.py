@@ -109,15 +109,15 @@ class HDMIOutput(BaseOutput):
         return f"HDMIOutput {self._connector_name} ({self._conn.id})"
 
 
-class VMOneContainer:
-    def __init__(self, is_raspi_5: bool):
+class VideoMachine:
+    def __init__(self, use_test_environment: Optional[bool] = False):
 
         self._outputs: Dict[int, BaseOutput] = {}
 
         self._outputs[1] = TestOutput("Test Output 1")
         self._outputs[2] = TestOutput("Test Output 2")
 
-        if is_raspi_5:
+        if not use_test_environment:
             # Create actual KMS outputs on raspi
             self._card = pykms.Card()
             self._res = pykms.ResourceManager(self._card)
@@ -171,18 +171,15 @@ class BasePipeline:
         self._pipeline = Gst.Pipeline.new()
         self._sink = None
 
-        # TODO: Use is_raspi_5 flag
-        if platform.machine() == "aarch64":
+        if not (slot._output._fd and slot._output._conn and slot._output._plane):
+            # this is not a system with KMS, use test sink
+            self._sink = Gst.ElementFactory.make("autovideosink")
+        else:
             self._sink = Gst.ElementFactory.make("kmssink")
             self._sink.set_property("skip-vsync", "true")
-        else:
-            self._sink = Gst.ElementFactory.make("autovideosink")
 
-        if slot._output._fd:
             self._sink.set_property("fd", slot._output._fd)
-        if slot._output._conn:
             self._sink.set_property("connector-id", slot._output._conn.id)
-        if slot._output._plane:
             self._sink.set_property("plane-id", slot._output._plane.id)
 
         # Create bus and connect several handlers
@@ -214,10 +211,6 @@ class BasePipeline:
         #    logger.debug("State is NULL")
         #    #self.pipeline.set_state(Gst.State.READY)
 
-    @abstractmethod
-    def _addToPipeline(self):
-        pass
-
     def _setPlaying(self):
         self._pipeline.set_state(Gst.State.PLAYING)
 
@@ -228,6 +221,9 @@ class BasePipeline:
     def stop(self):
         self._pipeline.set_state(Gst.State.NULL)
 
+    def setSourceFile(self, srcFileName):
+        self._source.set_property("location", srcFileName)
+
 
 class VideoPipelineDecodebin(BasePipeline):
     def __init__(self, slot: "VideoSlot"):
@@ -236,18 +232,12 @@ class VideoPipelineDecodebin(BasePipeline):
         self._decode = Gst.ElementFactory.make("decodebin")
         self._sink = None
         self._kmssink_fd = None
-        if platform.machine() == "aarch64":
+        if not (slot._output._fd and slot._output._conn and slot._output._plane):
+            self._sink = Gst.ElementFactory.make("autovideosink")
+        else:
             self._sink = Gst.ElementFactory.make("kmssink")
             self._sink.set_property("skip-vsync", "true")
-        else:
-            self._sink = Gst.ElementFactory.make("autovideosink")
 
-        self._addToPipeline()
-
-    def _onPadAdded(self, dbin, pad):
-        self._decode.link(self._sink)
-
-    def _addToPipeline(self):
         self._pipeline.add(self._source)
         self._pipeline.add(self._decode)
         self._pipeline.add(self._sink)
@@ -257,8 +247,8 @@ class VideoPipelineDecodebin(BasePipeline):
 
         self._decode.connect("pad-added", self._onPadAdded)
 
-    def setSourceFile(self, srcFileName):
-        self._source.set_property("location", srcFileName)
+    def _onPadAdded(self, dbin, pad):
+        self._decode.link(self._sink)
 
 
 class VideoPipelineH264(BasePipeline):
@@ -270,19 +260,14 @@ class VideoPipelineH264(BasePipeline):
         self._decode = Gst.ElementFactory.make("avdec_h264")
         self._sink = None
         self._kmssink_fd = None
-        if platform.machine() == "aarch64":
+
+        if not (slot._output._fd and slot._output._conn and slot._output._plane):
+            # this is not a system with KMS, use test sink
+            self._sink = Gst.ElementFactory.make("autovideosink")
+        else:
             self._sink = Gst.ElementFactory.make("kmssink")
             self._sink.set_property("skip-vsync", "true")
-        else:
-            self._sink = Gst.ElementFactory.make("autovideosink")
 
-        self._addToPipeline()
-
-    def _onDemuxPadAdded(self, dbin, pad):
-        if pad.name == "video_0":
-            self._demux.link(self._decode)
-
-    def _addToPipeline(self):
         self._pipeline.add(self._source)
         self._pipeline.add(self._demux)
         self._pipeline.add(self._parse)
@@ -297,8 +282,9 @@ class VideoPipelineH264(BasePipeline):
 
         self._demux.connect("pad-added", self._onDemuxPadAdded)
 
-    def setSourceFile(self, srcFileName):
-        self._source.set_property("location", srcFileName)
+    def _onDemuxPadAdded(self, dbin, pad):
+        if pad.name == "video_0":
+            self._demux.link(self._decode)
 
 
 class SlotState(enum.Enum):
@@ -317,7 +303,7 @@ class VideoSlot:
         self._alpha = 0.0
 
         self._useHwDecoder = useHwDecoder
-        self.fading = False
+        self.fading = True
 
     def _resetPipeline(self):
         if self._pipeline != None:
@@ -340,6 +326,7 @@ class VideoSlot:
 
     def setAlpha(self, alpha):
         if self._output._plane is None:
+            logger.warning("Fading not suppored, no KMS plane present.")
             return
 
         self._alpha = min(1.0, max(0.0, alpha))
@@ -417,7 +404,7 @@ if __name__ == "__main__":
 
     index = 0
     videoElements = []
-    vmOne = VMOneContainer(is_raspi_5)
+    vmOne = VideoMachine(use_test_environment=not is_raspi_5)
     fileNames0 = ["/home/gordon/test/butterfly.mp4", "/home/gordon/test/bird.mp4"]
 
     switchVideos()
