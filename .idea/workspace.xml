@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="61ff6498-e0bf-4d51-be86-8d7a57cd5e61" name="Changes" comment="Fix bugs on raspberry">
+      <change afterPath="$PROJECT_DIR$/src/theatris_rpo/slot_flag.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theatris_rpo/gst_pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theatris_rpo/gst_pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theatris_rpo/osc_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theatris_rpo/osc_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theatris_rpo/video_machine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theatris_rpo/video_machine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theatris_rpo/video_output.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theatris_rpo/video_output.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theatris_rpo/video_slot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theatris_rpo/video_slot.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;fraklein&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:fraklein/theatris-rpo.git&quot;,
+    &quot;accountId&quot;: &quot;0d6e244b-507a-4a26-93c7-65a9ad2c08e6&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="37elbu4M3DoyTv1C2OOcg3z7pZh" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python tests.Python tests for test_media_registry.TestMediaRegistry.executor": "Run",
+    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_media_discovery.executor": "Run",
+    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_starting_with_a_number.executor": "Run",
+    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_with_duplicated_number.executor": "Run",
+    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scan_rejects_file_as_base_directory.executor": "Run",
+    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scan_rejects_inexisting_base_directory.executor": "Run",
+    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scan_rejects_nonexisting_base_directory.executor": "Run",
+    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scans_existing_base_directory.executor": "Run",
+    "Python tests.pytest in gordon.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.test_media_registry.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ai.playground.ignore.import.keys.banner.in.settings": "true",
+    "last_opened_file_path": "/home/gordon/coding/python/theatris-rpo/test_videos",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "Errors",
+    "uv run.Main local.executor": "Debug",
+    "uv run.Unnamed.executor": "Run",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test_videos" />
+      <recent name="$PROJECT_DIR$/scripts" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/theatris-rpo/media_registry" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/theatris-rpo" />
+      <recent name="$PROJECT_DIR$/trials" />
+    </key>
+  </component>
+  <component name="RunManager" selected="uv run.Main local">
+    <configuration name="Main local" type="UvRunConfigurationType" factoryName="UvRunConfigurationType">
+      <option name="args">
+        <list>
+          <option value="$PROJECT_DIR$/test_videos/" />
+        </list>
+      </option>
+      <option name="checkSync" value="true" />
+      <option name="env">
+        <map />
+      </option>
+      <option name="runType" value="SCRIPT" />
+      <option name="scriptOrModule" value="$PROJECT_DIR$/src/theatris_rpo/main.py" />
+      <option name="uvArgs">
+        <list />
+      </option>
+      <option name="uvSdkKey" value="uv (theatris-rpo)" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_media_registry.TestMediaRegistry" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="theatris-rpo" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_media_registry.TestMediaRegistry&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_media_registry.TestMediaRegistry.test_media_discovery" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="theatris-rpo" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_media_registry.TestMediaRegistry.test_media_discovery&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_starting_with_a_number" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="theatris-rpo" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_starting_with_a_number&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_with_duplicated_number" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="theatris-rpo" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_with_duplicated_number&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_media_registry.TestMediaRegistry.test_registry_scans_existing_base_directory" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="theatris-rpo" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_media_registry.TestMediaRegistry.test_registry_scans_existing_base_directory&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in gordon" type="tests" factoryName="py.test" nameIsGenerated="true">
+      <module name="theatris-rpo" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="uv (theatris-rpo)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python tests.pytest in gordon" />
+      <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_media_discovery" />
+      <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_starting_with_a_number" />
+      <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_with_duplicated_number" />
+      <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry" />
+      <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scans_existing_base_directory" />
+      <item itemvalue="uv run.Main local" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry" />
+        <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scans_existing_base_directory" />
+        <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_media_discovery" />
+        <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_with_duplicated_number" />
+        <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_starting_with_a_number" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.29346.142" />
+        <option value="bundled-python-sdk-f2b7a9f6281b-6e1f45a539f7-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.29346.142" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="61ff6498-e0bf-4d51-be86-8d7a57cd5e61" name="Changes" comment="" />
+      <created>1767271492248</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1767271492248</updated>
+      <workItem from="1767378180310" duration="209000" />
+      <workItem from="1767378396932" duration="9446000" />
+      <workItem from="1767430831965" duration="12000" />
+      <workItem from="1767444849159" duration="2269000" />
+      <workItem from="1767449774577" duration="16384000" />
+      <workItem from="1767524277456" duration="19319000" />
+      <workItem from="1767560564937" duration="1632000" />
+      <workItem from="1767607422265" duration="1812000" />
+      <workItem from="1767609290863" duration="30041000" />
+      <workItem from="1767687219999" duration="3292000" />
+      <workItem from="1767696628979" duration="29350000" />
+      <workItem from="1767778124059" duration="22033000" />
+    </task>
+    <task id="LOCAL-00001" summary="Update pycharm project">
+      <option name="closed" value="true" />
+      <created>1767363499639</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1767363499639</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Restructure project">
+      <option name="closed" value="true" />
+      <created>1767382306751</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1767382306751</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add remote development configuration">
+      <option name="closed" value="true" />
+      <created>1767385467023</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1767385467023</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Working with 7 Slots">
+      <option name="closed" value="true" />
+      <created>1767544175865</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1767544175865</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add media_registry">
+      <option name="closed" value="true" />
+      <created>1767622039740</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1767622039741</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Parse command line arguments for base directory path">
+      <option name="closed" value="true" />
+      <created>1767627466575</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1767627466575</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Small fixes">
+      <option name="closed" value="true" />
+      <created>1767627930571</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1767627930571</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Send heartbeat">
+      <option name="closed" value="true" />
+      <created>1767701892616</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1767701892616</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Add OSC stop methods">
+      <option name="closed" value="true" />
+      <created>1767722120909</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1767722120909</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Add OSC play, play_test, set_alpha, pause methods">
+      <option name="closed" value="true" />
+      <created>1767731415065</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1767731415065</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Fix bugs on raspberry">
+      <option name="closed" value="true" />
+      <created>1767732840895</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1767732840895</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Update pycharm project" />
+    <MESSAGE value="Restructure project" />
+    <MESSAGE value="Add remote development configuration" />
+    <MESSAGE value="test videos" />
+    <MESSAGE value="Working with 7 Slots" />
+    <MESSAGE value="Add media_registry" />
+    <MESSAGE value="Parse command line arguments for base directory path" />
+    <MESSAGE value="Small fixes" />
+    <MESSAGE value="Send heartbeat" />
+    <MESSAGE value="Add OSC stop methods" />
+    <MESSAGE value="Add OSC play, play_test, set_alpha, pause methods" />
+    <MESSAGE value="Fix bugs on raspberry" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix bugs on raspberry" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.13/site-packages/pythonosc/dispatcher.py</url>
+          <line>248</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/theatris_rpo$test_media_registry.coverage" NAME="test_media_registry Coverage Results" MODIFIED="1767560462179" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/theatris_rpo$pytest_in_gordon.coverage" NAME="pytest in gordon Coverage Results" MODIFIED="1767560544652" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/theatris_rpo$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1767381921768" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/theatris_rpo$main.coverage" NAME="main Coverage Results" MODIFIED="1767625646564" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/theatris_rpo" />
+    <SUITE FILE_PATH="coverage/theatris_rpo$Main_local.coverage" NAME="Main local Coverage Results" MODIFIED="1767812891059" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/theatris_rpo$.coverage" NAME=" Coverage Results" MODIFIED="1767623141764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+  </component>
+</project>

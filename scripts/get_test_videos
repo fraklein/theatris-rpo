@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$0")"
+wget -nc -i ./test_video_urls -P ../test_videos
