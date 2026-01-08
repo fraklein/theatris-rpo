@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="61ff6498-e0bf-4d51-be86-8d7a57cd5e61" name="Changes" comment="Fix bugs on raspberry">
-      <change afterPath="$PROJECT_DIR$/src/theatris_rpo/slot_flag.py" afterDir="false" />
+    <list default="true" id="61ff6498-e0bf-4d51-be86-8d7a57cd5e61" name="Changes" comment="Number slots per output">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TODO.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theatris_rpo/gst_pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theatris_rpo/gst_pipeline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theatris_rpo/osc_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theatris_rpo/osc_interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theatris_rpo/video_machine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theatris_rpo/video_machine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theatris_rpo/video_output.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theatris_rpo/video_output.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theatris_rpo/video_slot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/theatris_rpo/video_slot.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,35 +47,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python tests.Python tests for test_media_registry.TestMediaRegistry.executor": "Run",
-    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_media_discovery.executor": "Run",
-    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_starting_with_a_number.executor": "Run",
-    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_with_duplicated_number.executor": "Run",
-    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scan_rejects_file_as_base_directory.executor": "Run",
-    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scan_rejects_inexisting_base_directory.executor": "Run",
-    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scan_rejects_nonexisting_base_directory.executor": "Run",
-    "Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scans_existing_base_directory.executor": "Run",
-    "Python tests.pytest in gordon.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.test_media_registry.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "ai.playground.ignore.import.keys.banner.in.settings": "true",
-    "last_opened_file_path": "/home/gordon/coding/python/theatris-rpo/test_videos",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "Errors",
-    "uv run.Main local.executor": "Debug",
-    "uv run.Unnamed.executor": "Run",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python tests.Python tests for test_media_registry.TestMediaRegistry.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_media_registry.TestMediaRegistry.test_media_discovery.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_starting_with_a_number.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_with_duplicated_number.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scan_rejects_file_as_base_directory.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scan_rejects_inexisting_base_directory.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scan_rejects_nonexisting_base_directory.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scans_existing_base_directory.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in gordon.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_media_registry.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ai.playground.ignore.import.keys.banner.in.settings&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/gordon/coding/python/theatris-rpo/test_videos&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;,
+    &quot;uv run.Main local.executor&quot;: &quot;Debug&quot;,
+    &quot;uv run.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/test_videos" />
@@ -219,10 +214,10 @@
     </configuration>
     <list>
       <item itemvalue="Python tests.pytest in gordon" />
+      <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry" />
       <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_media_discovery" />
       <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_starting_with_a_number" />
       <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_rejects_files_not_with_duplicated_number" />
-      <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry" />
       <item itemvalue="Python tests.Python tests for test_media_registry.TestMediaRegistry.test_registry_scans_existing_base_directory" />
       <item itemvalue="uv run.Main local" />
     </list>
@@ -262,7 +257,8 @@
       <workItem from="1767609290863" duration="30041000" />
       <workItem from="1767687219999" duration="3292000" />
       <workItem from="1767696628979" duration="29350000" />
-      <workItem from="1767778124059" duration="22033000" />
+      <workItem from="1767778124059" duration="23620000" />
+      <workItem from="1767866513451" duration="9694000" />
     </task>
     <task id="LOCAL-00001" summary="Update pycharm project">
       <option name="closed" value="true" />
@@ -352,7 +348,23 @@
       <option name="project" value="LOCAL" />
       <updated>1767732840895</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Add OSC config methods">
+      <option name="closed" value="true" />
+      <created>1767816127328</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1767816127328</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Number slots per output">
+      <option name="closed" value="true" />
+      <created>1767869121550</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1767869121551</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -382,7 +394,9 @@
     <MESSAGE value="Add OSC stop methods" />
     <MESSAGE value="Add OSC play, play_test, set_alpha, pause methods" />
     <MESSAGE value="Fix bugs on raspberry" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix bugs on raspberry" />
+    <MESSAGE value="Add OSC config methods" />
+    <MESSAGE value="Number slots per output" />
+    <option name="LAST_COMMIT_MESSAGE" value="Number slots per output" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

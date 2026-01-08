@@ -2,7 +2,7 @@
 OSC API
 ========
 
-* mark containers/methods that are already implemented
+* marks containers/methods that are already implemented
 
 Sending
 --------
@@ -46,5 +46,9 @@ Receiving
 */stop_all
 
 
-TODO: Validate OSC inputs
+TODO: Play test file right after startup, in a loop
+TODO: Create shell script that starts the app
+TODO: Create systemd unit file to start app at startup
+TODO: Create a shared directory for the video files
+TODO: Describe how to prepare the raspberry for headless "silent" booting
 
