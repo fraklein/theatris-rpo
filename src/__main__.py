@@ -1,10 +1,11 @@
+#
 import argparse
 
 import gi
 
-from log import logger
 from theatris_rpo.config import config, Conf
-from video_machine import VideoMachine
+from theatris_rpo.gst_pipeline import logger
+from theatris_rpo.video_machine import VideoMachine
 
 gi.require_version("GLib", "2.0")
 gi.require_version("GObject", "2.0")

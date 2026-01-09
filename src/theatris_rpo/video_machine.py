@@ -15,9 +15,9 @@ from theatris_rpo.base_interface import BaseInterface
 from theatris_rpo.config import config, Conf
 from theatris_rpo.media_registry.media_registry import MediaRegistry
 from theatris_rpo.slot_flag import SlotFlag
-from video_output import BaseOutput, TestOutput, HDMIOutput
-from osc_interface import OscInterface
-from log import logger
+from theatris_rpo.video_output import BaseOutput, TestOutput, HDMIOutput
+from theatris_rpo.osc_interface import OscInterface
+from theatris_rpo.log import logger
 
 
 class VideoMachine:

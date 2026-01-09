@@ -42,7 +42,7 @@ At the moment, just clone this repository and run via uv:
 ```bash
 > git clone git@github.com:fraklein/theatris-rpo.git 
 > cd theatris-rpo/
-> uv run src/theatris_rpo/main.py /full/path/to/directory/where/video_files/are/located
+> uv run src/theatris_rpo/__main__.py /full/path/to/directory/where/video_files/are/located
 ```
 
 ### File name conventions

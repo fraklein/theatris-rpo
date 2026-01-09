@@ -7,10 +7,10 @@ from returns.pointfree import bind
 from returns.result import Result, Failure, Success
 from returns.pipeline import flow
 
-from log import logger
-from slot_state import SlotState
+from theatris_rpo.log import logger
+from theatris_rpo.slot_state import SlotState
 from theatris_rpo.slot_flag import SlotFlag
-from video_slot import VideoSlot
+from theatris_rpo.video_slot import VideoSlot
 
 
 class BaseOutput:

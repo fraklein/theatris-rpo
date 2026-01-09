@@ -46,7 +46,6 @@ Receiving
 */stop_all
 
 
-TODO: Play test file right after startup, in a loop
 TODO: Create shell script that starts the app
 TODO: Create systemd unit file to start app at startup
 TODO: Create a shared directory for the video files

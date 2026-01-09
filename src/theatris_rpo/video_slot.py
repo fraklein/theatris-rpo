@@ -1,12 +1,11 @@
-import itertools
 import logging
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 from returns.result import Result, Success, Failure
 
-from gst_pipeline import BasePipeline, VideoPipelineDecodebin, VideoPipelineTestSrc
-from slot_state import SlotState
+from theatris_rpo.gst_pipeline import BasePipeline
+from theatris_rpo.slot_state import SlotState
 from theatris_rpo.gst_pipeline import VideoPipelinePlaybin3
 from theatris_rpo.slot_flag import SlotFlag
 
