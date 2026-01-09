@@ -44,6 +44,8 @@ class BaseOutput:
                 self._height = m.vdisplay
 
             logger.debug(self)
+            if self.is_connected:
+                logger.info(f"  Width/Height: {self._width}x{self._height}")
 
         if file_descriptor:
             self._fd = file_descriptor
