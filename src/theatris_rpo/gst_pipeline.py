@@ -69,31 +69,17 @@ class BasePipeline(ABC):
 
         self._build_pipeline()
 
-        def _set_output_size():
-            try:
-                display_width = self._kmssink.get_property("display-width")
-                display_height = self._kmssink.get_property("display-height")
-                logger.debug("display-width %s", display_width)
-                logger.debug("display-height %s", display_height)
+        try:
+            display_width = self.slot.output.width
+            display_height = self.slot.output.height
 
-                if display_width == 0 or display_height == 0:
-                    display_width = config[Conf.OUTPUT0_WIDTH]
-                    display_height = config[Conf.OUTPUT0_HEIGHT]
-
-                caps = Gst.Caps.from_string(
-                    f"video/x-raw, width={display_width}, height={display_height}"
-                )
-                self._capsfilter.set_property("caps", caps)
-                # Working test on cli: gst-launch-1.0 -v filesrc location=/home/gordon/test/butterfly.mp4 ! decodebin ! videoscale ! video/x-raw,width=800, height=400 ! kmssink
-
-            except TypeError:
-                raise
-
-        # display-width and display-height properties of kmssink are only available in PAUSED or PLAYING.
-        # DEACTIVATED because the wrongly scaled first frame is still in the sink after setting the caps on scale
-        # until we find out how to flush the sink, jsut set a configured display size
-        # self._transition_to_paused(callback=_set_output_size, even_when_inactive=True)
-        _set_output_size()
+            caps = Gst.Caps.from_string(
+                f"video/x-raw, width={display_width}, height={display_height}"
+            )
+            self._capsfilter.set_property("caps", caps)
+            # Working test on cli: gst-launch-1.0 -v filesrc location=/home/gordon/test/butterfly.mp4 ! decodebin ! videoscale ! video/x-raw,width=800, height=400 ! kmssink
+        except TypeError:
+            raise
 
         if slot.output.fd:
             self._kmssink.set_property("fd", slot.output.fd)

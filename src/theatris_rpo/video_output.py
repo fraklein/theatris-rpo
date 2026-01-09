@@ -2,6 +2,7 @@ import itertools
 from pathlib import Path
 from typing import Any, List
 
+from kms import Connector, VideoMode
 from returns.pointfree import bind
 from returns.result import Result, Failure, Success
 from returns.pipeline import flow
@@ -28,10 +29,21 @@ class BaseOutput:
         self._conn = None
         self._crtc = None
         self._fd = None
+        self._connected = False
+        self._width = 0
+        self._height = 0
 
         if self._res:
-            self._conn = self._res.reserve_connector(connector_name)
+            self._conn: Connector = self._res.reserve_connector(connector_name)
             self._crtc = self._res.reserve_crtc(self._conn)
+            self._connected = self._conn.connected
+
+            if self._connected:
+                m: VideoMode = self._crtc.mode
+                self._width = m.hdisplay
+                self._height = m.vdisplay
+
+            logger.debug(self)
 
         if file_descriptor:
             self._fd = file_descriptor
@@ -69,8 +81,20 @@ class BaseOutput:
         return self._connector_name
 
     @property
+    def width(self):
+        return self._width
+
+    @property
+    def height(self):
+        return self._height
+
+    @property
     def next_slot_id(self) -> int:
         return next(self._slot_id_iterator)
+
+    @property
+    def is_connected(self) -> bool:
+        return self._connected
 
     def add_video_slot(self, file_path: Path | None):
         self._video_slots.append(VideoSlot(self, file_path, cfg_auto_fade_time=0.0))
@@ -185,4 +209,4 @@ class HDMIOutput(BaseOutput):
         )
 
     def __repr__(self):
-        return f"{type(self).__name__}(#{self.id}) '{self._connector_name}' ({self._conn.id})"
+        return f"{type(self).__name__}(#{self.id}) '{self._connector_name}' ({self._conn.id}) {'Connected' if self._conn.connected else 'Not connected'}"
