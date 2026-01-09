@@ -69,24 +69,25 @@ class BasePipeline(ABC):
 
         self._build_pipeline()
 
-        try:
-            display_width = self.slot.output.width
-            display_height = self.slot.output.height
+        if config[Conf.IS_RASPI_5]:
+            try:
+                display_width = self.slot.output.width
+                display_height = self.slot.output.height
 
-            caps = Gst.Caps.from_string(
-                f"video/x-raw, width={display_width}, height={display_height}"
-            )
-            self._capsfilter.set_property("caps", caps)
-            # Working test on cli: gst-launch-1.0 -v filesrc location=/home/gordon/test/butterfly.mp4 ! decodebin ! videoscale ! video/x-raw,width=800, height=400 ! kmssink
-        except TypeError:
-            raise
+                caps = Gst.Caps.from_string(
+                    f"video/x-raw, width={display_width}, height={display_height}"
+                )
+                self._capsfilter.set_property("caps", caps)
+                # Working test on cli: gst-launch-1.0 -v filesrc location=/home/gordon/test/butterfly.mp4 ! decodebin ! videoscale ! video/x-raw,width=800, height=400 ! kmssink
+            except TypeError:
+                raise
 
-        if slot.output.fd:
-            self._kmssink.set_property("fd", slot.output.fd)
-        if slot.output.conn:
-            self._kmssink.set_property("connector-id", slot.output.conn.id)
-        if slot.plane:
-            self._kmssink.set_property("plane-id", slot.plane.id)
+            if slot.output.fd:
+                self._kmssink.set_property("fd", slot.output.fd)
+            if slot.output.conn:
+                self._kmssink.set_property("connector-id", slot.output.conn.id)
+            if slot.plane:
+                self._kmssink.set_property("plane-id", slot.plane.id)
 
         # Create bus and connect several handlers
         self._bus = self._pipeline.get_bus()
