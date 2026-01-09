@@ -7,6 +7,7 @@ from returns.result import Result, Success, Failure
 
 from gst_pipeline import BasePipeline, VideoPipelineDecodebin, VideoPipelineTestSrc
 from slot_state import SlotState
+from theatris_rpo.gst_pipeline import VideoPipelinePlaybin3
 from theatris_rpo.slot_flag import SlotFlag
 
 if TYPE_CHECKING:
@@ -114,9 +115,9 @@ class VideoSlot:
         self._pipeline = None
         del self._pipeline
         if use_test_source:
-            self._pipeline = VideoPipelineTestSrc(self)
+            self._pipeline = None  # VideoPipelineTestSrc(self)
         else:
-            self._pipeline = VideoPipelineDecodebin(self)
+            self._pipeline = VideoPipelinePlaybin3(self)
             self._pipeline.set_source_file(self._file_path)
 
     def on_pipeline_eos_enter(self) -> bool:

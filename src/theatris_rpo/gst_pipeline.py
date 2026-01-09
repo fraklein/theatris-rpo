@@ -1,6 +1,7 @@
 import logging
 import pathlib
 import platform
+import time
 from abc import abstractmethod, ABC
 from typing import TYPE_CHECKING, Callable
 
@@ -28,36 +29,60 @@ class BasePipeline(ABC):
         self._gst_state_new = None
         self._gst_state_pending = None
 
-        self._sink = None
+        self._sink = Gst.Bin.new("sink")
         if config[Conf.IS_RASPI_5]:
-            self._sink = Gst.ElementFactory.make("kmssink")
-            self._sink.set_property("skip-vsync", "true")
-            self._sink.set_property("show-preroll-frame", "false")
-        else:
-            self._sink = Gst.ElementFactory.make("autovideosink")
+            self._kmssink = Gst.ElementFactory.make("kmssink", "kmssink")
+            self._kmssink.set_property("skip-vsync", "true")
+            self._kmssink.set_property("show-preroll-frame", "false")
+            # self._kmssink.set_property("can-scale", "true")
+            # self._kmssink.set_property("force-modesetting", "false")
 
-        self._videoscale = Gst.ElementFactory.make("videoscale")
-        self._capsfilter = Gst.ElementFactory.make("capsfilter", "filter")
+            self._sink.add(self._kmssink)
+
+            self._videoscale = Gst.ElementFactory.make("videoscale")
+            self._sink.add(self._videoscale)
+            self._capsfilter = Gst.ElementFactory.make("capsfilter", "filter")
+            self._sink.add(self._capsfilter)
+
+            if not self._videoscale.link(self._capsfilter):
+                logger.error("Link Error: videoscale -> caps_filter")
+
+            if not self._capsfilter.link(self._kmssink):
+                logger.error("Link Error: caps_filter -> kmssink")
+
+            # self.pad = self._kmssink.get_static_pad("sink")
+            self.pad = self._videoscale.get_static_pad("sink")
+            self.ghostpad = Gst.GhostPad.new("sink", self.pad)
+            self.ghostpad.set_active(True)
+            self._sink.add_pad(self.ghostpad)
+
+        else:
+            self._autovideosink = Gst.ElementFactory.make(
+                "autovideosink", "autovideosink"
+            )
+            self._sink.add(self._autovideosink)
+
+            self.pad = self._autovideosink.get_static_pad("sink")
+            self.ghostpad = Gst.GhostPad.new("sink", self.pad)
+            self.ghostpad.set_active(True)
+            self._sink.add_pad(self.ghostpad)
 
         self._build_pipeline()
-
-        if slot.output.fd:
-            self._sink.set_property("fd", slot.output.fd)
-        if slot.output.conn:
-            self._sink.set_property("connector-id", slot.output.conn.id)
-        if slot.plane:
-            self._sink.set_property("plane-id", slot.plane.id)
 
         # display-width and display-height properties of kmssink are only available in PAUSED or PLAYING.
         # But: Setting PAUSED here leads to issues when the playing should be started later.
         # Turns out: Setting READY here also returns the properties.
-        self._pipeline.set_state(Gst.State.READY)
+        # self._pipeline.set_state(Gst.State.READY)
+        # time.sleep(1)
 
         try:
-            display_width = self._sink.get_property("display-width")
-            display_height = self._sink.get_property("display-height")
+            display_width = self._kmssink.get_property("display-width")
+            display_height = self._kmssink.get_property("display-height")
             logger.debug("display-width %s", display_width)
             logger.debug("display-height %s", display_height)
+
+            display_width = 800
+            display_height = 400
 
             caps = Gst.Caps.from_string(
                 f"video/x-raw, width={display_width}, height={display_height}"
@@ -66,6 +91,13 @@ class BasePipeline(ABC):
             # Working test on cli: gst-launch-1.0 -v filesrc location=/home/gordon/test/butterfly.mp4 ! decodebin ! videoscale ! video/x-raw,width=800, height=400 ! kmssink
         except TypeError:
             pass
+
+        if slot.output.fd:
+            self._kmssink.set_property("fd", slot.output.fd)
+        if slot.output.conn:
+            self._kmssink.set_property("connector-id", slot.output.conn.id)
+        if slot.plane:
+            self._kmssink.set_property("plane-id", slot.plane.id)
 
         # Create bus and connect several handlers
         self._bus = self._pipeline.get_bus()
@@ -201,6 +233,20 @@ class BasePipeline(ABC):
 
     def __repr__(self):
         return f"{self.__class__.__name__} (Slot{self._slot})"
+
+
+class VideoPipelinePlaybin3(BasePipeline):
+    def __init__(self, slot: "VideoSlot"):
+        self._playbin = Gst.ElementFactory.make("playbin3", "playbin")
+        super().__init__(slot)
+
+    def _build_pipeline(self):
+        self._pipeline.add(self._playbin)
+        self._playbin.set_property("video-sink", self._sink)
+
+    def set_source_file(self, srcFileName: pathlib.Path):
+        file_name = "file://" + str(srcFileName)
+        self._playbin.set_property("uri", file_name)
 
 
 class VideoPipelineDecodebin(BasePipeline):
