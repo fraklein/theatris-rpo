@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Callable
 
 from gi.repository import Gst, GLib
 
+from theatris_rpo.config import config, Conf
 
 if TYPE_CHECKING:
     from theatris_rpo.video_slot import VideoSlot
@@ -28,7 +29,7 @@ class BasePipeline(ABC):
         self._gst_state_pending = None
 
         self._sink = None
-        if platform.machine() == "aarch64":
+        if config[Conf.IS_RASPI_5]:
             self._sink = Gst.ElementFactory.make("kmssink")
             self._sink.set_property("skip-vsync", "true")
             self._sink.set_property("show-preroll-frame", "false")

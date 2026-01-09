@@ -3,6 +3,7 @@ import argparse
 import gi
 
 from log import logger
+from theatris_rpo.config import config, Conf
 from video_machine import VideoMachine
 
 gi.require_version("GLib", "2.0")
@@ -26,6 +27,8 @@ if __name__ == "__main__":
     except FileNotFoundError:
         logger.info("This seems not to be a raspberry pi, using test environment")
 
+    config[Conf.IS_RASPI_5] = is_raspi_5
+
     def init_argparse() -> argparse.ArgumentParser:
         parser = argparse.ArgumentParser(
             prog="theatris_rpo",
@@ -43,5 +46,5 @@ if __name__ == "__main__":
     parser = init_argparse()
     args = parser.parse_args()
 
-    vm = VideoMachine(args.base_dir, use_test_environment=not is_raspi_5)
+    vm = VideoMachine(args.base_dir)
     vm.start()

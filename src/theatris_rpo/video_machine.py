@@ -3,12 +3,16 @@ import sys
 from pathlib import Path
 
 from gi.events import GLibEventLoopPolicy  # type: ignore
+import gi
+
+gi.require_version("Gst", "1.0")
 from gi.repository import GLib, Gst
 from returns.pointfree import bind
 from returns.result import Result, Failure, Success
 from returns.pipeline import flow
 
 from theatris_rpo.base_interface import BaseInterface
+from theatris_rpo.config import config, Conf
 from theatris_rpo.media_registry.media_registry import MediaRegistry
 from theatris_rpo.slot_flag import SlotFlag
 from video_output import BaseOutput, TestOutput, HDMIOutput
@@ -17,10 +21,10 @@ from log import logger
 
 
 class VideoMachine:
-    def __init__(self, media_file_path_str: str, use_test_environment: bool):
+    def __init__(self, media_file_path_str: str):
         self._outputs: list[BaseOutput] = []
 
-        if not use_test_environment:
+        if config[Conf.IS_RASPI_5]:
             # Create actual KMS outputs on raspberry pi
             import kms
 
