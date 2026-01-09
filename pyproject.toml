@@ -5,7 +5,6 @@ description = "Remotely OSC-controlled video-player for raspberry pi"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "attrs>=25.4.0",
     "pygobject>=3.54.5",
     "pygobject-stubs>=2.16.0",
     "pykms",
@@ -13,7 +12,6 @@ dependencies = [
     "python-oscquery>=0.3.0",
     "returns>=0.26.0",
     "ruff>=0.14.10",
-    "ty>=0.0.8",
 ]
 
 [tool.uv.sources]
