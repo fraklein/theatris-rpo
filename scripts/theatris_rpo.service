@@ -1,0 +1,33 @@
+[Unit]
+Description=Headless video player with OSC interface
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=gordon
+Restart=on-failure
+ExecStart=bash coding/theatris-rpo/scripts/theatris_rpo
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

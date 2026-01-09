@@ -1,0 +1,4 @@
+
+TODO: Create a shared directory for the video files
+TODO: Describe how to prepare the raspberry for headless "silent" booting (see Trello notes)
+

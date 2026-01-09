@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cd /home/gordon/coding/theatris-rpo/
+uv run src/__main__.py -s 9999 /home/gordon/showcontent/
