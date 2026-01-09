@@ -69,28 +69,31 @@ class BasePipeline(ABC):
 
         self._build_pipeline()
 
+        def _set_output_size():
+            try:
+                display_width = self._kmssink.get_property("display-width")
+                display_height = self._kmssink.get_property("display-height")
+                logger.debug("display-width %s", display_width)
+                logger.debug("display-height %s", display_height)
+
+                if display_width == 0 or display_height == 0:
+                    display_width = config[Conf.OUTPUT0_WIDTH]
+                    display_height = config[Conf.OUTPUT0_HEIGHT]
+
+                caps = Gst.Caps.from_string(
+                    f"video/x-raw, width={display_width}, height={display_height}"
+                )
+                self._capsfilter.set_property("caps", caps)
+                # Working test on cli: gst-launch-1.0 -v filesrc location=/home/gordon/test/butterfly.mp4 ! decodebin ! videoscale ! video/x-raw,width=800, height=400 ! kmssink
+
+            except TypeError:
+                raise
+
         # display-width and display-height properties of kmssink are only available in PAUSED or PLAYING.
-        # But: Setting PAUSED here leads to issues when the playing should be started later.
-        # Turns out: Setting READY here also returns the properties.
-        # self._pipeline.set_state(Gst.State.READY)
-        # time.sleep(1)
-
-        try:
-            display_width = self._kmssink.get_property("display-width")
-            display_height = self._kmssink.get_property("display-height")
-            logger.debug("display-width %s", display_width)
-            logger.debug("display-height %s", display_height)
-
-            display_width = 800
-            display_height = 400
-
-            caps = Gst.Caps.from_string(
-                f"video/x-raw, width={display_width}, height={display_height}"
-            )
-            self._capsfilter.set_property("caps", caps)
-            # Working test on cli: gst-launch-1.0 -v filesrc location=/home/gordon/test/butterfly.mp4 ! decodebin ! videoscale ! video/x-raw,width=800, height=400 ! kmssink
-        except TypeError:
-            pass
+        # DEACTIVATED because the wrongly scaled first frame is still in the sink after setting the caps on scale
+        # until we find out how to flush the sink, jsut set a configured display size
+        # self._transition_to_paused(callback=_set_output_size, even_when_inactive=True)
+        _set_output_size()
 
         if slot.output.fd:
             self._kmssink.set_property("fd", slot.output.fd)
@@ -182,7 +185,10 @@ class BasePipeline(ABC):
         GLib.timeout_add(20, self._transition_to_playing)
 
     def _transition_to_paused(
-        self, rewind: bool = False, callback: Callable | None = None
+        self,
+        rewind: bool = False,
+        callback: Callable | None = None,
+        even_when_inactive: bool = False,
     ):
         """'Wait' (by polling) for the next required state to get the pipeline into paused state.
         Rewind (seek to 0) if flag is set."""
@@ -195,17 +201,22 @@ class BasePipeline(ABC):
                 if rewind:
                     logger.debug("%s: (to paused)  rewinding....", self)
                     self.rewind()
-                    # Transition finished, inform interested parties
-                    if callback:
-                        callback()
+                # Transition finished, inform interested parties
+                if callback:
+                    callback()
                 return
+            case Gst.State.NULL:
+                logger.debug("%s: (to paused)  Setting to ready...", self)
+                self._pipeline.set_state(Gst.State.READY)
             case _:
-                if self.slot.is_inactive:
+                if self.slot.is_inactive and not even_when_inactive:
                     return
                 logger.debug("%s: (to paused)  Setting to paused...", self)
                 self._pipeline.set_state(Gst.State.PAUSED)
 
-        GLib.timeout_add(20, self._transition_to_paused, rewind, callback)
+        GLib.timeout_add(
+            20, self._transition_to_paused, rewind, callback, even_when_inactive
+        )
 
     def roll(self):
         """Set the pipeline to playing via well-defined transitions.
