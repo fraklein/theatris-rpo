@@ -134,7 +134,11 @@ class VideoMachine:
         if output_number is None:
             # Stop all outputs
             for output in self.outputs.values():
-                return output.stop_all_video()
+                match output.stop_all_video():
+                    case Success(_):
+                        continue
+                    case Failure(msg):
+                        return Failure(msg)
         try:
             output = self.outputs[output_number]
         except KeyError:
