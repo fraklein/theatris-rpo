@@ -40,11 +40,20 @@ if __name__ == "__main__":
             "base_dir",
             help="Absolute file path to the directory where media files are located",
         )
+        parser.add_argument(
+            "-s",
+            "--start-with",
+            help="Start playing this file number directly after start-up",
+        )
 
         return parser
 
     parser = init_argparse()
     args = parser.parse_args()
 
-    vm = VideoMachine(args.base_dir)
+    start_number = None
+    if "start_with" in args:
+        start_number = int(args.start_with)
+
+    vm = VideoMachine(args.base_dir, start_number)
     vm.start()

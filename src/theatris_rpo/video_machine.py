@@ -21,7 +21,9 @@ from log import logger
 
 
 class VideoMachine:
-    def __init__(self, media_file_path_str: str):
+    def __init__(self, media_file_path_str: str, start_number: int | None = None):
+        self._start_number = start_number
+
         self._outputs: list[BaseOutput] = []
 
         if config[Conf.IS_RASPI_5]:
@@ -85,6 +87,9 @@ class VideoMachine:
                     self._asyncio_loop.create_task(interface.async_start())
                 if hasattr(interface, "sync_start"):
                     interface.sync_start()
+            GLib.timeout_add(
+                int(3.0 * 1000.0), self._play_start_file, self._start_number
+            )
             logger.debug("Starting main loop")
             self._mainloop.run()
 
@@ -199,3 +204,9 @@ class VideoMachine:
         beat_state = not beat_state
 
         GLib.timeout_add(int(1.0 * 1000.0), self._heartbeat, beat_state)
+
+    def _play_start_file(self, file_number: int):
+        for output in self.outputs.values():
+            if output.is_connected:
+                output.set_slot_config(0, SlotFlag.LOOPING, True)
+                output.play_video(0, self._media.file_path(file_number))
