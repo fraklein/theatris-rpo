@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import sys
 from pathlib import Path
 
@@ -17,7 +18,9 @@ from theatris_rpo.media_registry.media_registry import MediaRegistry
 from theatris_rpo.slot_flag import SlotFlag
 from theatris_rpo.video_output import BaseOutput, TestOutput, HDMIOutput
 from theatris_rpo.osc_interface import OscInterface
-from theatris_rpo.log import logger
+
+
+logger = logging.getLogger(__name__)
 
 
 class VideoMachine:

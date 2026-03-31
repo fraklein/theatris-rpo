@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import time
 from typing import TYPE_CHECKING, Any
 
@@ -12,12 +13,14 @@ from pythonoscquery.shared.osc_path_node import OSCPathNode
 from pythonoscquery.shared.oscquery_spec import OSCQueryAttribute
 from returns.result import Success, Failure
 
-from theatris_rpo.log import logger
 from theatris_rpo.base_interface import BaseInterface, AsyncOscInterfaceMixin
 from theatris_rpo.slot_flag import SlotFlag
 
 if TYPE_CHECKING:
     from theatris_rpo.video_machine import VideoMachine
+
+
+logger = logging.getLogger(__name__)
 
 
 class OscInterface(BaseInterface, AsyncOscInterfaceMixin):

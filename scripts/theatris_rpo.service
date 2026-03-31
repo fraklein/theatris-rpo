@@ -6,7 +6,7 @@ Wants=network-online.target
 [Service]
 User=gordon
 Restart=on-failure
-ExecStart=bash coding/theatris-rpo/scripts/theatris_rpo
+ExecStart=bash /home/gordon/coding/theatris-rpo/scripts/theatris_rpo
 
 [Install]
 WantedBy=multi-user.target

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
 
+# Start the app in its venv with uv.
+# This is not an elegant solution, but it works for now (for me).
+
 cd /home/gordon/coding/theatris-rpo/
-uv run src/__main__.py -s 9999 /home/gordon/showcontent/
+/home/gordon/.local/bin/uv run src/__main__.py -s 9999 /home/gordon/showcontent/

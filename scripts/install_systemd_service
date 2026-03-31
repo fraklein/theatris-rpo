@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SERVICE_FILE="theatris_rpo.service "
+
+SRC_PATH="$SCRIPT_DIR/$SERVICE_FILE"
+
+echo "Installing systemd service $SRC_PATH"
+
+sudo cp $SCRIPT_DIR/theatris_rpo.service /etc/systemd/system/
+
+sudo systemctl daemon-reload
+sudo systemctl enable theatris_rpo.service
+sudo systemctl start theatris_rpo.service

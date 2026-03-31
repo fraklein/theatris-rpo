@@ -10,11 +10,7 @@ gi.require_version("Gst", "1.0")
 gi.require_version("GstPbutils", "1.0")
 from gi.repository import Gst, GstPbutils  # noqa: E402
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="[%(asctime)s.%(msecs)03d][%(name)s] [%(levelname)8s] - %(message)s",
-    datefmt="%H:%M:%S",
-)
+
 logger = logging.getLogger(__name__)
 
 
@@ -77,6 +73,7 @@ class MediaRegistry:
                 continue
 
             self._files_by_number[number] = path
+            logger.info(f"Added file {path} to media registry.")
 
         self._valid = True
 

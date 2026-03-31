@@ -1,15 +1,28 @@
 #
 import argparse
+import logging, logging.handlers
+import sys
 
 import gi
 
 from theatris_rpo.config import config, Conf
-from theatris_rpo.gst_pipeline import logger
 from theatris_rpo.video_machine import VideoMachine
+
+logger = logging.getLogger(__name__)
 
 gi.require_version("GLib", "2.0")
 gi.require_version("GObject", "2.0")
 gi.require_version("Gst", "1.0")
+
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="[%(asctime)s.%(msecs)03d][%(name)s] [%(levelname)8s] - %(message)s",
+    datefmt="%H:%M:%S",
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+    ],
+)
 
 
 if __name__ == "__main__":

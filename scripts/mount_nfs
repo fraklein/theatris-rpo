@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+sudo mount -t nfs raspberrypi:/home/gordon/showcontent/ /mnt/raspberry_showcontent_A/

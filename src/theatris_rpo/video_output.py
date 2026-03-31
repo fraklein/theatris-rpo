@@ -1,4 +1,5 @@
 import itertools
+import logging
 from pathlib import Path
 from typing import Any, List
 
@@ -7,10 +8,12 @@ from returns.pointfree import bind
 from returns.result import Result, Failure, Success
 from returns.pipeline import flow
 
-from theatris_rpo.log import logger
 from theatris_rpo.slot_state import SlotState
 from theatris_rpo.slot_flag import SlotFlag
 from theatris_rpo.video_slot import VideoSlot
+
+
+logger = logging.getLogger(__name__)
 
 
 class BaseOutput:
