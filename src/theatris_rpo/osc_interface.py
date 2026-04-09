@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import socket
 import time
 from typing import TYPE_CHECKING, Any
 
@@ -215,7 +216,11 @@ class OscInterface(BaseInterface, AsyncOscInterfaceMixin):
 
     def sync_start(self):
         self._oscquery_server = OSCQueryService(
-            self._address_space, "theatris_rpo", self._port, self._port, self._ip
+            self._address_space,
+            f"theatris_rpo_{socket.gethostname()}",
+            self._port,
+            self._port,
+            self._ip,
         )
         logger.info("Started OSCquery server")
 

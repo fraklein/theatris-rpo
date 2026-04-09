@@ -1,8 +1,10 @@
 import asyncio
 import logging
+import socket
 import sys
 from pathlib import Path
 
+import psutil
 from gi.events import GLibEventLoopPolicy  # type: ignore
 import gi
 
@@ -73,7 +75,19 @@ class VideoMachine:
         self._interfaces: list[BaseInterface] = []
 
         # set up OSC interface
-        self._interfaces.append(OscInterface("0.0.0.0", 9000, self))
+
+        for interface, addrs in psutil.net_if_addrs().items():
+            if interface == "eth0":
+                print(f"*** {interface}")
+                for addr in addrs:
+                    if addr.family is socket.AF_INET:
+                        ip_address = addr.address
+                        logger.debug(
+                            f"Using {addr.address} for OSC and OSCQuery servers,"
+                        )
+                        break
+
+        self._interfaces.append(OscInterface(ip_address, 9000, self))
 
     @property
     def outputs(self) -> dict[int, BaseOutput]:

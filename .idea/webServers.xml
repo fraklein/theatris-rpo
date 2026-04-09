@@ -2,8 +2,15 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="0cdbb1ca-9b37-40df-b163-6d147ddc9fd9" name="raspberrypi">
-        <fileTransfer rootFolder="/home/gordon" accessType="SFTP" host="raspberrypi" port="22" sshConfigId="1994d551-9b3c-49c5-9a90-f788de9d2c8b" sshConfig="gordon@raspberrypi:22 agent" authAgent="true">
+      <webServer id="0cdbb1ca-9b37-40df-b163-6d147ddc9fd9" name="raspberrypi_A">
+        <fileTransfer rootFolder="/home/gordon" accessType="SFTP" host="raspberrypia" port="22" sshConfigId="1994d551-9b3c-49c5-9a90-f788de9d2c8b" sshConfig="gordon@raspberrypia:22 agent" authAgent="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" isUseRsync="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="72eb70c6-5e67-4170-993d-46f35801fa0d" name="raspberrypi_B">
+        <fileTransfer rootFolder="/home/gordon" accessType="SFTP" host="raspberrypib" port="22" sshConfigId="6e920ed8-4855-4341-b680-e2b4add5f42c" sshConfig="gordon@raspberrypib:22" authAgent="true">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" isUseRsync="true" />
           </advancedOptions>
