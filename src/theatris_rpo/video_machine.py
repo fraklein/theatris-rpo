@@ -2,6 +2,7 @@ import asyncio
 import logging
 import socket
 import sys
+from ipaddress import ip_address, IPv4Address
 from pathlib import Path
 
 import psutil
@@ -76,6 +77,7 @@ class VideoMachine:
 
         # set up OSC interface
 
+        ip_address = None
         for interface, addrs in psutil.net_if_addrs().items():
             if interface == "eth0":
                 print(f"*** {interface}")
@@ -86,6 +88,12 @@ class VideoMachine:
                             f"Using {addr.address} for OSC and OSCQuery servers,"
                         )
                         break
+
+        if not ip_address:
+            logger.warning(
+                "No local IPV4 address found on any interface. Falling back to loopback 127.0.0.1"
+            )
+            ip_address = IPv4Address("127.0.0.1")
 
         self._interfaces.append(OscInterface(ip_address, 9000, self))
 
