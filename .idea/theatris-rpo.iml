@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="uv (theatris-rpo)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="uv SSH (sftp://gordon@raspberrypia:22/home/gordon/coding/theatris-rpo/.venv/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

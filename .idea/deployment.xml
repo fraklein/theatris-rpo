@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="raspberrypi_B" deleteMissingItems="true" createEmptyFolders="true" preserveFilePermissions="true" remoteFilesAllowedToDisappearOnAutoupload="false" autoUploadExternalChanges="true" showEqualInSync="true" showDifferentInSync="false" showNewOnTargetInSync="false" showExcludedInSync="true">
+  <component name="PublishConfigData" autoUpload="Always" serverName="gordon@raspberrypia:22 agent (2)" deleteMissingItems="true" createEmptyFolders="true" preserveFilePermissions="true" remoteFilesAllowedToDisappearOnAutoupload="false" autoUploadExternalChanges="true" showEqualInSync="true" showDifferentInSync="false" showNewOnTargetInSync="false" showExcludedInSync="true">
     <serverData>
+      <paths name="gordon@raspberrypia:22 agent">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_976" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="gordon@raspberrypia:22 agent (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_6e4e9c96" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="raspberrypi_A">
         <serverdata>
           <mappings>

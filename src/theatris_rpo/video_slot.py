@@ -12,16 +12,15 @@ from theatris_rpo.slot_flag import SlotFlag
 if TYPE_CHECKING:
     from video_output import BaseOutput
 
-
 logger = logging.getLogger(__name__)
 
 
 class VideoSlot:
     def __init__(
-        self,
-        output: "BaseOutput",
-        file_path: Path | None = None,
-        cfg_auto_fade_time: float = 0.0,
+            self,
+            output: "BaseOutput",
+            file_path: Path | None = None,
+            cfg_auto_fade_time: float = 0.0,
     ):
         self._output = output
         self._id = output.next_slot_id
@@ -164,8 +163,8 @@ class VideoSlot:
             self._alpha = 1.0
 
         self._state = SlotState.ACTIVATING
-        self._pipeline.roll()
-        self.unblank()
+        self._pipeline.roll(self.unblank)
+
         return Success(None)
 
     def play_test(self) -> Result[None, str]:
@@ -177,8 +176,8 @@ class VideoSlot:
         self._reset_pipeline(use_test_source=True)
 
         self._state = SlotState.ACTIVATING
-        self._pipeline.roll()
-        self.unblank()
+        self._pipeline.roll(self.unblank)
+
         return Success(None)
 
     def pause(self) -> Result[None, str]:
@@ -195,9 +194,9 @@ class VideoSlot:
             return Failure("Slot uninitialized. Ignoring stop command.")
 
         if self._state not in (
-            SlotState.ACTIVE,
-            SlotState.ACTIVATING,
-            SlotState.PAUSED,
+                SlotState.ACTIVE,
+                SlotState.ACTIVATING,
+                SlotState.PAUSED,
         ):
             return Failure("Slot not active. Ignoring stop command.")
 

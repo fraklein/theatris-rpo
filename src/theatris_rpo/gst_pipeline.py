@@ -10,7 +10,6 @@ from theatris_rpo.config import config, Conf
 if TYPE_CHECKING:
     from theatris_rpo.video_slot import VideoSlot
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -120,9 +119,9 @@ class BasePipeline(ABC):
 
         old_state, new_state, pending_state = msg.parse_state_changed()
         if (
-            self._gst_state_current != old_state
-            or self._gst_state_new != new_state
-            or self._gst_state_pending != pending_state
+                self._gst_state_current != old_state
+                or self._gst_state_new != new_state
+                or self._gst_state_pending != pending_state
         ):  # TODO: Now that we're filtering on pipeline state changes, this should be redundant. Or is it?
             pass
             if True:
@@ -142,7 +141,8 @@ class BasePipeline(ABC):
     def _build_pipeline(self):
         pass
 
-    def _transition_to_playing(self):
+    def _transition_to_playing(self,
+                               callback: Callable | None = None, ):
         """'Wait' (by polling) for the next required state to get the pipeline into playing state"""
         _, state, _ = self._pipeline.get_state(
             2000 * 1000 * 1000
@@ -156,20 +156,23 @@ class BasePipeline(ABC):
                 self._pipeline.set_state(Gst.State.PLAYING)
             case Gst.State.PLAYING:
                 logger.debug("%s: (to playing) is playing.", self)
-                return  # transition is finished
+                # Transition finished, inform interested parties
+                if callback:
+                    callback()
+                return
             case _:
                 if self.slot.is_inactive:
                     # Prevent endless loop if playing can't be started for some reason
                     return
                 logger.debug("%s: (to playing) Setting to ready...", self)
                 self._pipeline.set_state(Gst.State.READY)
-        GLib.timeout_add(20, self._transition_to_playing)
+        GLib.timeout_add(20, self._transition_to_playing, callback)
 
     def _transition_to_paused(
-        self,
-        rewind: bool = False,
-        callback: Callable | None = None,
-        even_when_inactive: bool = False,
+            self,
+            rewind: bool = False,
+            callback: Callable | None = None,
+            even_when_inactive: bool = False,
     ):
         """'Wait' (by polling) for the next required state to get the pipeline into paused state.
         Rewind (seek to 0) if flag is set."""
@@ -199,10 +202,10 @@ class BasePipeline(ABC):
             20, self._transition_to_paused, rewind, callback, even_when_inactive
         )
 
-    def roll(self):
+    def roll(self, callback: Callable | None = None):
         """Set the pipeline to playing via well-defined transitions.
         This *will not* retrigger an already playing pipeline."""
-        self._transition_to_playing()
+        self._transition_to_playing(callback=callback)
 
     def pause(self):
         """Stop playback, but don't blank or rewind."""
