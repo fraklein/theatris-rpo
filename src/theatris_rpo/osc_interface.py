@@ -20,7 +20,6 @@ from theatris_rpo.slot_flag import SlotFlag
 if TYPE_CHECKING:
     from theatris_rpo.video_machine import VideoMachine
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -54,6 +53,18 @@ class OscInterface(BaseInterface, AsyncOscInterfaceMixin):
         #####
         ## Receiving
         #####
+
+        # /rescan_media
+        pythonoscquery.pythonosc_callback_wrapper.map_node(
+            OSCPathNode(
+                f"/rescan_media",
+                access=OSCAccess.NO_VALUE,
+                description=f"Rescan media directory",
+            ),
+            self._dispatcher,
+            self._handler_rescan_media,
+            self._address_space,
+        )
 
         # /stop_all
         pythonoscquery.pythonosc_callback_wrapper.map_node(
@@ -247,7 +258,7 @@ class OscInterface(BaseInterface, AsyncOscInterfaceMixin):
         self._video_machine.play_video(args[0], args[1])
 
     def _handler_play_by_number(
-        self, address, args: list[int], number: int, restart_if_already_playing: bool
+            self, address, args: list[int], number: int, restart_if_already_playing: bool
     ):
         output: int | None = self._assign_fixed_arg(0, args)
         slot: int | None = self._assign_fixed_arg(1, args)
@@ -306,7 +317,7 @@ class OscInterface(BaseInterface, AsyncOscInterfaceMixin):
         return None
 
     def _handler_cfg_set_alpha_to_full_at_start(
-        self, address, args: list[int], on_off: bool
+            self, address, args: list[int], on_off: bool
     ):
         output: int | None = self._assign_fixed_arg(0, args)
         slot: int | None = self._assign_fixed_arg(1, args)
@@ -327,6 +338,14 @@ class OscInterface(BaseInterface, AsyncOscInterfaceMixin):
         match self._video_machine.set_slot_config(
             output, slot, SlotFlag.LOOPING, on_off
         ):
+            case Success():
+                return None
+            case Failure(msg):
+                return address, msg
+        return None
+
+    def _handler_rescan_media(self, address):
+        match self._video_machine.rescan_media():
             case Success():
                 return None
             case Failure(msg):

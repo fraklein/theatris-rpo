@@ -22,7 +22,6 @@ from theatris_rpo.slot_flag import SlotFlag
 from theatris_rpo.video_output import BaseOutput, TestOutput, HDMIOutput
 from theatris_rpo.osc_interface import OscInterface
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -124,11 +123,11 @@ class VideoMachine:
             logger.info("Stopped by keyboard interrupt")
 
     def play_video(
-        self,
-        output_number: int,
-        slot_number: int,
-        file_number: int | None = None,
-        restart_if_already_playing: bool = False,
+            self,
+            output_number: int,
+            slot_number: int,
+            file_number: int | None = None,
+            restart_if_already_playing: bool = False,
     ) -> Result[None, str]:
         try:
             output = self.outputs[output_number]
@@ -149,9 +148,9 @@ class VideoMachine:
         return output.play_video(slot_number, file_path, restart_if_already_playing)
 
     def play_test(
-        self,
-        output_number: int,
-        slot_number: int,
+            self,
+            output_number: int,
+            slot_number: int,
     ) -> Result[None, str]:
         return flow(
             self._get_output(output_number),
@@ -159,7 +158,7 @@ class VideoMachine:
         )
 
     def stop_playout(
-        self, output_number: int | None = None, slot_number: int | None = None
+            self, output_number: int | None = None, slot_number: int | None = None
     ) -> Result[None, str]:
         if output_number is None:
             # Stop all outputs
@@ -182,7 +181,7 @@ class VideoMachine:
         return output.stop_video(slot_number)
 
     def set_alpha(
-        self, output_number: int, slot_number: int, alpha: float
+            self, output_number: int, slot_number: int, alpha: float
     ) -> Result[None, str]:
         return flow(
             self._get_output(output_number),
@@ -190,9 +189,9 @@ class VideoMachine:
         )
 
     def pause_video(
-        self,
-        output_number: int,
-        slot_number: int,
+            self,
+            output_number: int,
+            slot_number: int,
     ) -> Result[None, str]:
         return flow(
             self._get_output(output_number),
@@ -200,12 +199,21 @@ class VideoMachine:
         )
 
     def set_slot_config(
-        self, output_number: int, slot_number: int, slot_flag: SlotFlag, *args
+            self, output_number: int, slot_number: int, slot_flag: SlotFlag, *args
     ) -> Result[None, str]:
         return flow(
             self._get_output(output_number),
             bind(lambda output: output.set_slot_config(slot_number, slot_flag, *args)),
         )
+
+    def rescan_media(self) -> Result[None, str]:
+        self._media.rescan_files()
+        if not self._media.valid:
+            msg = "Could not scan media files. Aborting."
+            logger.fatal(msg)
+            return Failure(msg)
+
+        return Success(True)
 
     def _get_output(self, output_number: int) -> Result[BaseOutput, str]:
         try:

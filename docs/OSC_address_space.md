@@ -21,20 +21,10 @@ Sending
 - /outputX/curent_fade_time
 - /outputX/current_elapsed_time
 
-Note to self:
-
-```python
-# query the current position of the stream
-ret, current = self.playbin.query_position(
-    Gst.Format.TIME)
-if not ret:
-    print("ERROR: Could not query current position")
-```
-
 Receiving
 ---------
 
-- */outputX
+- */rescan_media
 - */stop_all
 - */outputX/slotX
 - */outputX/slotX/play_by_number(number:int, restart_when_already_playing: bool)

@@ -10,9 +10,7 @@ gi.require_version("Gst", "1.0")
 gi.require_version("GstPbutils", "1.0")
 from gi.repository import Gst, GstPbutils  # noqa: E402
 
-
 logger = logging.getLogger(__name__)
-
 
 LOG_MESSAGES = {
     "file_does_not_start_with_integer": "File name must start with an integer number. Ignoring file %s",
@@ -77,6 +75,12 @@ class MediaRegistry:
 
         self._valid = True
 
+    def rescan_files(self):
+        # clear existing registry
+        self._files_by_number = dict()
+        self._valid = False
+        self.scan_files()
+
     def _iterdir_recursive(self, path: Path) -> Iterator[Path]:
         if not path.is_dir():
             return
@@ -112,15 +116,3 @@ class MediaRegistry:
         # For now, if we can parse the media, and it has any video, let's assume it can be played. This might need more
         # detailed type checking.
         return video_present
-
-
-# Todo
-# Check for valid format
-
-# via osc:
-# play given filenumber on given slot
-# -> Check if setting the filesrc is enough to change the file and HOW FAST THIS IS
-
-
-# 99_O1_S1_P1_name
-# 99_O1_S1_P1_name
